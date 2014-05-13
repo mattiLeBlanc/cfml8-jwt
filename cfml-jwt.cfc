@@ -66,7 +66,7 @@
         <cfset var header = createObject("java", "java.util.LinkedHashMap").init() /> <!--- StructNew doesnt work because coldfusion 8 orders the keys --->
         <cfset var claims = createObject("java", "java.util.LinkedHashMap").init() /> <!--- StructNew doesnt work because coldfusion 8 orders the keys --->
         <cfset var segments = ArrayNew(1)>
-        <cfdump var="#this.encoding#" />
+
         <!---
             creation of first segment of our JWT: the header
         --->
