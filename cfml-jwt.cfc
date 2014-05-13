@@ -34,7 +34,7 @@
     <!---
         Constructor
     --->
-    <cffunction name="init" access="public" returntype="jwt">
+    <cffunction name="init" access="public" returntype="cfml-jwt">
 
         <cfargument name="iss"          type="string"    required="Yes" hint="The 'iss' field is a standard JWT field that identifies the issuer of the JWT.">
         <cfargument name="aud"          type="string"    required="Yes" hint="The 'aud' field is a standard JWT field that identifies the target audience for the JWT.">
