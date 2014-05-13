@@ -154,9 +154,9 @@ component jwt
 
             return local.payload;
         }
-        catch( any message)
+        catch( any message )
         {
-            switch( fcatch.message )
+            switch( cfcatch.message )
             {
                 case "invalidSegmentCount":
                     writeOutput( "Wrong nubmber of segments" );
