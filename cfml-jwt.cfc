@@ -23,11 +23,11 @@
 <cfcomponent>
 
 
-    <cfset Variables.encoding = "iso-8859-1">
-    <cfset Variables.iss = "">
-    <cfset Variables.aud = "">
-    <cfset Variables.exp = "">
-    <cfset Variables.iat = "">
+    <cfset this.encoding = "iso-8859-1">
+    <cfset this.iss = "">
+    <cfset this.aud = "">
+    <cfset this.exp = "">
+    <cfset this.iat = "">
 
 
 
@@ -66,7 +66,7 @@
         <cfset var header = createObject("java", "java.util.LinkedHashMap").init() /> <!--- StructNew doesnt work because coldfusion 8 orders the keys --->
         <cfset var claims = createObject("java", "java.util.LinkedHashMap").init() /> <!--- StructNew doesnt work because coldfusion 8 orders the keys --->
         <cfset var segments = ArrayNew(1)>
-
+        <cfdump var="#this.encoding#" />
         <!---
             creation of first segment of our JWT: the header
         --->
@@ -257,7 +257,7 @@
         </cfswitch>
 
        <cfset local.key             = createObject("java", "javax.crypto.spec.SecretKeySpec").init(
-            Arguments.key.getBytes( Variables.encoding ), local.algor
+            Arguments.key.getBytes( this.encoding ), local.algor
         ) />
 
        <cfset local.mac             = createObject("java", "javax.crypto.Mac" ).getInstance( local.algor ) />
@@ -265,7 +265,7 @@
 
        <cfreturn toBase64(
             local.mac.doFinal(
-                Arguments.msg.getBytes( Variables.encoding )
+                Arguments.msg.getBytes( this.encoding )
             )
        ) />
 
