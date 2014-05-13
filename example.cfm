@@ -9,7 +9,7 @@
 /*
     Create our component and preset some of the required JWT fields. ISS and AUD will automatically be added to the payload while decoding.
 */
-    Variables.JWT = createObject( "component", "cfml-jwt" ).init(
+    Variables.JWT = createObject( "component", "cfmls-jwt" ).init(
         iss                         = "the issuer party"
     ,   aud                         = "the audience"
     ,   exp                         = 3600

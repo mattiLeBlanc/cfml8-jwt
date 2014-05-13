@@ -1,19 +1,21 @@
-cfml8-jwt
+cfmls-jwt
 =========
 
 
 
- JWT Coldfusion 8 component, loosly based on PHP version @ https://github.com/firebase/php-jwt
+ JWT Coldfusion Script component, loosly based on PHP version @ https://github.com/firebase/php-jwt
 
     Description:        This component exposes a encode and decode function which let you decode a JSON Web Token or create one
-                        The component is specially written for Coldfusion 8 because of the platform I had to work on.
+                        The compenent is based on CFML8-JWT but rewritten in CF Sript.
+                        IT HAS NOT BEEN TESTED YET!
+
                         It will also work on newer coldfusions (havent tested it yet), whereas CFML 10 finally added the HMac() function which would make
                         the CFHashMac redudant.
 
                         If you rewrite this component, please Fork it.
 
     Author:             Mattijs Spierings
-    Date:               12/5/2014
+    Date:               13/5/2014
     License:            GPL V2
 
     Reference on JWT:   http://self-issued.info/docs/draft-ietf-oauth-json-web-token.html
