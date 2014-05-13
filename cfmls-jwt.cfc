@@ -61,8 +61,8 @@ component jwt
      {
         //define our variables here
         var currentTime = getCurrentUtcTime();
-        var header      = createObject("java", "java.util.LinkedHashMap").init(); // StructNew doesnt work because coldfusion 8 orders the keys
-        var claims      = createObject("java", "java.util.LinkedHashMap").init(); // StructNew doesnt work because coldfusion 8 orders the keys
+        var header      = createObject("java", "java.util.LinkedHashMap").init(); // StructNew doesnt work because coldfusion orders the keys (does it also do this in newer versions?)
+        var claims      = createObject("java", "java.util.LinkedHashMap").init(); // StructNew doesnt work because coldfusion orders the keys (does it also do this in newer versions?)
         var segments    = [];
 
         // creation of first segment of our JWT: the header
@@ -75,27 +75,26 @@ component jwt
 
         // creation of the middle segment: the claims set
         //
-        claims[ "iss" ] = this.iss;
-        claims[ "aud" ] = this.aud;
-        claims[ "iat" ] = javaCast( "int", currentTime );
-        claims[ "exp" ] = javaCast( "int", ( currentTime + this.exp ) );
+        claims[ "iss" ]     = this.iss;
+        claims[ "aud" ]     = this.aud;
+        claims[ "iat" ]     = javaCast( "int", currentTime );
+        claims[ "exp" ]     = javaCast( "int", ( currentTime + this.exp ) );
         claims[ "request" ] = Arguments.payload;
 
         // escape forward slashes in generated JSON
         //
-        claimsJson = replace(  serializeJSON( claims ), "/", "\/", "all" );
+        claimsJson          = replace(  serializeJSON( claims ), "/", "\/", "all" );
         // add header and json with base64 encoding (with padding REMOVED!) to segment array
         //
         arrayAppend( segments, replace( toBase64( claimsJson ), "=", "", "all" ) );
 
         // create the last segment: the signature
         //
-        signingInput = ArrayToList( segments, "." );
-        signature = sign( signingInput, Arguments.key, Arguments.algo );
+        signingInput        = ArrayToList( segments, "." );
+        signature           = sign( signingInput, Arguments.key, Arguments.algo );
 
         // add signature as last the element to our string
         //
-
         return ListAppend( signingInput, signature, ".");
      }
 
@@ -115,7 +114,6 @@ component jwt
 
             // assurre we have received 3 segments (head, body and  hMAC )
             //
-
             if ( ArrayLen( local.parts ) neq 3 )
             {
                 throw type="Application" message="invalidSegmentCount";
@@ -147,7 +145,6 @@ component jwt
                 //
                 if ( urlsafeB64Decode( local.testSignature ) neq local.signature )
                 {
-
                     throw type="Application" message="sigFailed";
                 }
             }
@@ -218,7 +215,7 @@ component jwt
         Arguments.input      = replace( Arguments.input, "-", "+", "all")>
         Arguments.input      = replace( Arguments.input, "_", "/", "all")>
 
-        local.remainder        = len( Arguments.input ) mod 4;
+        local.remainder      = len( Arguments.input ) mod 4;
 
         // add padding to input string so that it is a valid base64 format
         //
