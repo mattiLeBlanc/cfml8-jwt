@@ -21,5 +21,9 @@ cfml8-jwt
     To do:
         add encryption options of header and payload to create JWE
 
+    NOTE:
+        If you are using another version than Coldfusion 8, please check my comments at the function getCurrentUtcTime concerning proper epoch time.
+        I haven't been able to test this on other versions than CFML 8
+
 
     See example.cfm file for encoding and decoding

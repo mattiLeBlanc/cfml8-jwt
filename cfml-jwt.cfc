@@ -17,6 +17,10 @@
 
     To do:
         add encryption options of header and payload to create JWE
+
+    NOTE:
+        If you are using another version than Coldfusion 8, please check my comments at the function getCurrentUtcTime concerning proper epoch time.
+        I haven't been able to test this on other versions than CFML 8
  --->
 
 
@@ -66,7 +70,7 @@
         <cfset var header = createObject("java", "java.util.LinkedHashMap").init() /> <!--- StructNew doesnt work because coldfusion 8 orders the keys --->
         <cfset var claims = createObject("java", "java.util.LinkedHashMap").init() /> <!--- StructNew doesnt work because coldfusion 8 orders the keys --->
         <cfset var segments = ArrayNew(1)>
-
+        <cfdump var="#this.encoding#" />
         <!---
             creation of first segment of our JWT: the header
         --->
@@ -172,6 +176,7 @@
 
                     <cfdefaultcase>
                         <cfoutput>#cfcatch.message#</cfoutput>
+
                     </cfdefaultcase>
 
                 </cfswitch>
@@ -272,14 +277,24 @@
     </cffunction>
 
     <!---
-        Return current UTC time in seconds
+        Return current UTC time in seconds from epoch (1970-1-1 00:00:0)
      --->
     <cffunction name="getCurrentUtcTime" returntype="Numeric" access="private">
 
-        <cfset local.currentDate = Now()>
-        <cfset local.utcDate = dateConvert( "local2utc", local.currentDate )>
-
-        <cfreturn round( local.utcDate.getTime() / 1000 )>
+        <!---
+            CFML8 always returns epoch time (seconds from 1970-1-1 00:00:00) when using the getTime(), conversion to UTC not necessary
+        --->
+        <cfif listFirst(server.coldfusion.productversion, ",") eq 8>
+            <cfset local.currentDate = Now()>
+            <cfreturn round( local.currentDate.getTime() / 1000 )>
+        <!---
+            I am not sure what ColdFusion 9 or 10 or higher and/or Railo will output when using the getTime function. Please test!
+        --->
+        <cfelse>
+            <cfset local.currentDate = Now()>
+            <cfset local.utcDate = dateConvert( "local2utc", local.currentDate )>
+            <cfreturn round( local.utcDate.getTime() / 1000 )>
+        </cfif>
 
     </cffunction>
 
