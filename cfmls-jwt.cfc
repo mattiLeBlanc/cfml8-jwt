@@ -18,6 +18,9 @@
     To do:
         -add encryption options of header and payload to create JWE
         -if Coldfusion 10+ replace custom hashmac function for native (make sure reasult is the same)
+
+    NOTE: Concerning getCurrentUtcTime function at the bottom: Not tested if getTime() from currentDate will result in epoch date in CFML9+.
+          In version 8 it does. If newer version of CFML causes troube, use the utcDate variable and test if the epoch time is correct
  */
 
 
@@ -240,7 +243,7 @@ component jwt
       * @return string          base64 hashmac value of msg
       */
      private string function CFHashMac( Required string msg, Required string key, Required string method )
-     {
+     {§
 
         switch( Arguments.method)
         {
@@ -271,12 +274,14 @@ component jwt
      *  Return current UTC time in seconds
      *
      * @return time in seconds from epoch
+     * NOTE: Not tested if getTime from currentDate will result in epoch date in CFML9+. In version 8 it does. If newer version of CFML causes troube, use the utcDate variable and test if the epoch time is correct
      */
      private numeric function getCurrentUtcTime()
      {
         local.currentDate = Now();
-        local.utcDate = dateConvert( "local2utc", local.currentDate );
-        return round( local.utcDate.getTime() / 1000 );
+        //local.utcDate = dateConvert( "local2utc", local.currentDate );
+        //return round( local.utcDate.getTime() / 1000 );
+        return round( local.currentDate.getTime() / 1000 );
      }
 
 
