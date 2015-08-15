@@ -41,7 +41,7 @@ component jwt
      *
      * @return jwt object
      */
-    public jwt function init( Required string iss, Required string aud, Required numeric exp, Required string encoding )
+    public function init( Required string iss, Required string aud, Required numeric exp, Required string encoding='utf-8' )
     {
         this.iss         = Arguments.iss;
         this.aud         = Arguments.aud;
@@ -60,7 +60,7 @@ component jwt
      *
      * @return string JSON Web Token
      */
-     public string function encode( Required any payload, Required string key, Required string algo )
+     public string function encode( Required any payload, Required string key, Required string algo='HS256' )
      {
         //define our variables here
         var currentTime = getCurrentUtcTime();
@@ -138,7 +138,7 @@ component jwt
 
                 if ( !StructKeyExists( local.header, "alg" ) )
                 {
-                    throw type="Application" message="noAlgor";
+                    throw(type="Application",message="noAlgor");
                 }
 
                 local.signinginput   = "#local.head64#.#local.body64#";
@@ -148,15 +148,15 @@ component jwt
                 //
                 if ( urlsafeB64Decode( local.testSignature ) neq local.signature )
                 {
-                    throw type="Application" message="sigFailed";
+                    throw(type="Application",message="sigFailed");
                 }
             }
 
             return local.payload;
         }
-        catch( any message )
+        catch( any e )
         {
-            switch( cfcatch.message )
+			switch( e.message )
             {
                 case "invalidSegmentCount":
                     writeOutput( "Wrong nubmber of segments" );
@@ -170,7 +170,7 @@ component jwt
                 break;
 
                 default:
-                    writeOutput( cfcatch.message );
+                	writeOutput( e.message );
                 break;
             }
 
@@ -215,8 +215,8 @@ component jwt
      {
         // return non websafe characters
         //
-        Arguments.input      = replace( Arguments.input, "-", "+", "all")>
-        Arguments.input      = replace( Arguments.input, "_", "/", "all")>
+        Arguments.input      = replace( Arguments.input, "-", "+", "all");
+        Arguments.input      = replace( Arguments.input, "_", "/", "all");
 
         local.remainder      = len( Arguments.input ) mod 4;
 
@@ -231,7 +231,7 @@ component jwt
         local.binaryValue    = binaryDecode( Arguments.input, "base64" );
         local.stringValue    = toString( local.binaryValue );
 
-        local.stringValue;
+        return local.stringValue;
      }
 
      /**
@@ -243,7 +243,7 @@ component jwt
       * @return string          base64 hashmac value of msg
       */
      private string function CFHashMac( Required string msg, Required string key, Required string method )
-     {§
+     {
 
         switch( Arguments.method)
         {
@@ -251,7 +251,7 @@ component jwt
                 local.algor  = "HmacSHA256";
             break;
 
-            default
+            default:
                 local.algor  = "HmacSHA256";
             break;
         }
